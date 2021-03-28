@@ -1,3 +1,7 @@
 # reactnd-3-redux-managing-state
 
-In this section, we connected our functioning state application with a front-end UI. We added some form fields and buttons to our UI that can be used to add new Todo items and Goal items to the state. Updating the state will also cause the entire application to re-render so that the visual representation of the application matches that of the info stored in the state object. Also we replaced the code we wrote in the previous lesson with the actual Redux library code.
+In this section, we looked at using middleware. According to the Redux docs:
+
+Middleware is the suggested way to extend Redux with custom functionality.
+
+Middleware is added to the Redux store using Redux.applyMiddleware(). You can only add middleware when you initially create the store
