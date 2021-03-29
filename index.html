@@ -234,6 +234,18 @@
                 )
             }
 
+            class ConnectedTodos extends React.Component {
+                render() {
+                    return (
+                        <Context.Consumer>
+                            {(store) => (
+                                <Todos store={store} todos={store.getState().todos}/>
+                            )}
+                        </Context.Consumer>
+                    )
+                }
+            }
+
             class Todos extends React.Component {
                 addItem = (e) => {
                     e.preventDefault();
@@ -266,6 +278,18 @@
                             
                             <List items={todos} remove={this.removeItem} toggle={this.toggleItem} />
                         </div>
+                    )
+                }
+            }
+
+            class ConnectedGoals extends React.Component {
+                render() {
+                    return (
+                        <Context.Consumer>
+                            {(store) => (
+                                <Goals store={store} goals={store.getState().goals}/>
+                            )}
+                        </Context.Consumer>
                     )
                 }
             }
@@ -312,8 +336,7 @@
                 }
 
                 render() {
-                    const { store } = this.props;
-                    const { todos, goals, loading } = store.getState();
+                    const { loading } = store.getState();
 
                     if(loading === true){
                         return <h3>Loading</h3>
@@ -321,8 +344,8 @@
 
                     return (
                         <div>
-                            <Todos todos={todos} store={store} />
-                            <Goals goals={goals} store={store} />    
+                            <ConnectedTodos />
+                            <ConnectedGoals />    
                         </div>
                     )
                 }
