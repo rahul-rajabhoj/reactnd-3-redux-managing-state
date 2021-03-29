@@ -186,6 +186,11 @@
 
                 toggleItem = (item) => {
                     store.dispatch(toggleTodoAction(item.id));
+                    
+                    API.saveTodoToggle(item.id).catch( err => {
+                        store.dispatch(toggleTodoAction(item.id))
+                        alert('An error occured !! Try Again');
+                    });
                 }
 
                 render() {
