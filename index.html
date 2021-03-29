@@ -79,6 +79,55 @@
                     });
                 }
             }
+
+            function handleDeleteGoal(goal) {
+                return (dispatch) => {
+                    dispatch(removeGoalAction(goal.id));
+
+                    API.deleteTodo(goal.id).catch( err => {
+                        dispatch(addGoalAction(goal))
+
+                        alert('An error occured !! Try Again');
+                    });
+                }
+            }
+
+            function handleToggleTodo(todo) {
+                return (dispatch) => {
+                    dispatch(toggleTodoAction(todo.id));
+                    
+                    API.saveTodoToggle(todo.id).catch( err => {
+                        dispatch(toggleTodoAction(todo.id))
+                        alert('An error occured !! Try Again');
+                    });
+                }
+            }
+
+            function handleAddGoal(value, callback) {
+                return (dispatch) => {
+                    API.saveGoal(value)
+                        .then((goal) => {
+                            dispatch(addGoalAction(goal));
+                            callback();
+                        })
+                        .catch(err => {
+                            alert('An error occured. Try Again');
+                        });
+                }
+            }
+
+            function handleAddTodo(value, callback) {
+                return (dispatch) => {
+                    API.saveTodo(value)
+                        .then((todo) => {
+                            dispatch(addTodoAction(todo));
+                            callback();
+                        })
+                        .catch(err => {
+                            alert('An error occured. Try Again');
+                        });
+                }
+            }
     
             function todos(state = [], action) {
                 switch(action.type) {
@@ -177,27 +226,19 @@
             class Todos extends React.Component {
                 addItem = (e) => {
                     e.preventDefault();
-                    API.saveTodo(this.input.value)
-                        .then((todo) => {
-                            this.props.store.dispatch(addTodoAction(todo));
-                            this.input.value = '';
-                        })
-                        .catch(err => {
-                            alert('An error occured. Try Again');
-                        });
+                    
+                    this.props.store.dispatch(handleAddTodo(
+                        this.input.value,
+                        () => this.input.value = ''
+                    ));
                 }
 
                 removeItem = (item) => {
-                    store.dispatch(handleDeleteTodo(item));
+                    this.props.store.dispatch(handleDeleteTodo(item));
                 }
 
                 toggleItem = (item) => {
-                    store.dispatch(toggleTodoAction(item.id));
-                    
-                    API.saveTodoToggle(item.id).catch( err => {
-                        store.dispatch(toggleTodoAction(item.id))
-                        alert('An error occured !! Try Again');
-                    });
+                    this.props.store.dispatch(handleToggleTodo(item));
                 }
 
                 render() {
@@ -221,24 +262,15 @@
             class Goals extends React.Component {
                 addItem = (e) => {
                     e.preventDefault();
-                    API.saveGoal(this.input.value)
-                        .then((goal) => {
-                            this.props.store.dispatch(addGoalAction(goal));
-                            this.input.value = '';
-                        })
-                        .catch(err => {
-                            alert('An error occured. Try Again');
-                        });
+
+                    this.props.store.dispatch(handleAddGoal(
+                        this.input.value,
+                        () => this.input.value = ''
+                    ));
                 }
 
                 removeItem = (item) => {
-                    store.dispatch(removeGoalAction(item.id));
-
-                    API.deleteTodo(item.id).catch( err => {
-                        store.dispatch(addGoalAction(item))
-
-                        alert('An error occured !! Try Again');
-                    });
+                    this.props.store.dispatch(handleDeleteGoal(item));
                 }
 
                 render() {
