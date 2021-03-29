@@ -150,12 +150,12 @@
                         { items.map((item) => (
                             <li key={item.id}>
                                 <span 
-                                    onClick={() => toggle && toggle(item.id)}
+                                    onClick={() => toggle && toggle(item)}
                                     style={{textDecoration: item.complete ? 'line-through': 'none'}}
                                 >
                                     {item.name}
                                 </span>
-                                <button onClick={() => remove(item.id)}>X</button>
+                                <button onClick={() => remove(item)}>X</button>
                             </li>
                         ))}
                     </ul>
@@ -175,12 +175,17 @@
                     }));
                 }
 
-                removeItem = (id) => {
-                    store.dispatch(removeTodoAction(id));
+                removeItem = (item) => {
+                    store.dispatch(removeTodoAction(item.id));
+
+                    API.deleteTodo(item.id).catch( err => {
+                        store.dispatch(addTodoAction(item))
+                        alert('An error occured !! Try Again');
+                    });
                 }
 
-                toggleItem = (id) => {
-                    store.dispatch(toggleTodoAction(id));
+                toggleItem = (item) => {
+                    store.dispatch(toggleTodoAction(item.id));
                 }
 
                 render() {
@@ -213,8 +218,14 @@
                     }));
                 }
 
-                removeItem = (id) => {
-                    store.dispatch(removeGoalAction(id));
+                removeItem = (item) => {
+                    store.dispatch(removeGoalAction(item.id));
+
+                    API.deleteTodo(item.id).catch( err => {
+                        store.dispatch(addGoalAction(item))
+
+                        alert('An error occured !! Try Again');
+                    });
                 }
 
                 render() {
